@@ -55,6 +55,39 @@ class UI {
 
     }
 
+    agregarGastoListado (gastos) {
+
+        this.limpiarHTML();
+        
+        // Itero sobre array gastos p crear HTML
+        gastos.forEach( (item) => {
+
+            const {cantidad, nombre, id} = item;
+
+            const li = document.createElement('LI');
+            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+            li.dataset.id = id;
+            li.innerHTML = `${nombre} <span class="badge badge-primary badge-pill"> ${cantidad} </span>`
+
+            const btnBorrar = document.createElement('BUTTON');
+            btnBorrar.classList.add('btn', 'btn-danger', 'borrar-gasto');
+            btnBorrar.textContent = 'Borrar';
+            li.appendChild(btnBorrar)
+
+            gastoListado.appendChild(li);
+            console.log(gastoListado)
+
+
+        })
+
+    }
+
+    limpiarHTML () {
+        while (gastoListado.firstChild) {
+            gastoListado.removeChild(gastoListado.firstChild);
+        }
+    }
+
 }
 
 
@@ -97,4 +130,10 @@ function agregarGasto (e) {
     // Muestro alerta y reset form.
     ui.mostrarAlerta('Gasto agregado exitosamente');
     formulario.reset();
+
+    // Imprimir los gastos
+    const { gastos } = presupuesto;
+    ui.agregarGastoListado(gastos);
+
+    
 }
