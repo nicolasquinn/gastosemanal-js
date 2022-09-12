@@ -23,6 +23,12 @@ class Presupuesto {
 
     agregarGasto (gasto) {
         this.gastos = [...this.gastos, gasto];
+        this.calcularRestante();
+    }
+
+    calcularRestante () {
+        const gastado = this.gastos.reduce( (total, item) => total + item.cantidad, 0 );
+        this.restante = this.presupuesto - gastado;
     }
 
 }
@@ -67,7 +73,7 @@ class UI {
             const li = document.createElement('LI');
             li.className = 'list-group-item d-flex justify-content-between align-items-center';
             li.dataset.id = id;
-            li.innerHTML = `${nombre} <span class="badge badge-primary badge-pill"> ${cantidad} </span>`
+            li.innerHTML = `${nombre} <span class="badge badge-primary badge-pill"> $${cantidad} </span>`
 
             const btnBorrar = document.createElement('BUTTON');
             btnBorrar.classList.add('btn', 'btn-danger', 'borrar-gasto');
@@ -86,6 +92,10 @@ class UI {
         while (gastoListado.firstChild) {
             gastoListado.removeChild(gastoListado.firstChild);
         }
+    }
+
+    actualizarRestante (restante) {
+        document.querySelector('#restante').textContent = restante;
     }
 
 }
@@ -132,8 +142,9 @@ function agregarGasto (e) {
     formulario.reset();
 
     // Imprimir los gastos
-    const { gastos } = presupuesto;
+    const { gastos, restante } = presupuesto;
     ui.agregarGastoListado(gastos);
+    ui.actualizarRestante(restante);
 
     
 }
